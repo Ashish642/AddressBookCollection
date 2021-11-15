@@ -28,6 +28,12 @@ public class Main {
                 case 3:
                         addressBookSystem.display();
                         break;
+
+                case 4:
+                    System.out.println("Enter your firstname to delete your details");
+                    String firstname = scanner.next();
+                    addressBookSystem.delete(firstname);
+                    break;
                 default:
                         status = false;
             }
