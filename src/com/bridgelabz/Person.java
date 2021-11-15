@@ -11,7 +11,7 @@ public class Person {
     private String zip;
 
 
-    public Person(String firstName, String lastName, String address, String city, String state, String zip, String phoneNumber) {
+    public Person(String firstName, String lastName, String address, String city, String state, long zip, String phoneNumber) {
 
 
         // constructor
@@ -20,7 +20,7 @@ public class Person {
         this.address = address;
         this.state = state;
         this.phoneNumber = Long.parseLong(phoneNumber);
-        this.zip = zip;
+        this.zip = String.valueOf(zip);
 
     }
     /* Getters and setters to return and set or update the value */
