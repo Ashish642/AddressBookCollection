@@ -21,8 +21,13 @@ public class Main {
                        addressBookSystem.add();
                        break;
                 case 2:
-                       addressBookSystem.display();
+                    System.out.println("Enter the firstname to egit your details");
+                    String firstName = scanner.next();
+                    addressBookSystem.edit(firstName);
                        break;
+                case 3:
+                        addressBookSystem.display();
+                        break;
                 default:
                         status = false;
             }
