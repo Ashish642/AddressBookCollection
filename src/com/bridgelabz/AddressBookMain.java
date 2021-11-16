@@ -8,16 +8,33 @@ public class AddressBookMain {
         // Declaring and Initializing with predefined standard input object
         Scanner scan = new Scanner(System.in);
         // Creating AddressBook object
-        AddressBook addressBook = new AddressBook();
+        AddressBook addressBook = new AddressBook() {
+            @Override
+            public void viewByCity(String city) {
+
+            }
+
+            @Override
+            public void viewByState(String state) {
+
+            }
+        };
 
         /*
          * To print options to perform Choice to print add and display method Update or
          * edit the details Delete the details using firstname
          */
         while (status) {
-            System.out.println("Hello Enter your option to perform actions: \n Press 1 to Add new person"
-                    + "\n Press 2 to Update/edit details \n Press 3 to Display details \n Press 4 to Delete details "
-                    + " \n Press 5 to Sort the details according to person firstname \n Press 6 to Search on the basis of state or city \nPress 9 to Quit");
+            System.out.println("""
+                    Hello Enter your option to perform actions:\s
+                     Press 1 to Add new person
+                     Press 2 to Update/edit details\s
+                     Press 3 to Display details\s
+                     Press 4 to Delete details \s
+                     Press 5 to Sort the details according to person firstname\s
+                     Press 6 to Search on the basis of state or city\s
+                     Press 7 to View on the basis of state or city\s
+                    Press 9 to Quit""");
             int choice = scan.nextInt();
             switch (choice) {
                 case 1:
@@ -42,19 +59,34 @@ public class AddressBookMain {
                     addressBook.sortAlphabetically(firstname);
                     break;
                 case 6:
-                    System.out.println("Hi!! on what basis you would like to sort the details \nPress 1 to Seach "
-                            + "on the basis of City\nPress 2 to Search on the basis of State\n");
+                    System.out.println("""
+                            Hi!! on what basis you would like to sort the details\s
+                            Press 1 to Search on the basis of City
+                            Press 2 to Search on the basis of State
+                            """);
                     int optionToSort = scan.nextInt();
                     if (optionToSort == 1) {
                         System.out.println("Enter person firstname");
                         firstname = scan.next();
                         addressBook.searchPersonInState(firstname);
-                        break;
                     } else {
                         firstname = scan.next();
                         addressBook.searchPersonInCity(firstname);
-                        break;
                     }
+                    break;
+                case 7:
+                    System.out.println("press 1 for view by city and 2 for view by state");
+                    int optionToView = scan.nextInt();
+                    if (optionToView == 1) {
+                        System.out.println("Enter city name");
+                        String city = scan.next();
+                        addressBook.viewByCity(city);
+                    } else {
+                        System.out.println("Enter state name");
+                        String state = scan.next();
+                        addressBook.viewByState(state);
+                    }
+                    break;
                 default:
                     status = false;
 
@@ -65,7 +97,7 @@ public class AddressBookMain {
     }
 
     /* Main method to call options */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         AddressBookMain main = new AddressBookMain();
         main.options();
 

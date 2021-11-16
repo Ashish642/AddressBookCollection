@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 //AddressBook implements AddressBookInfo
-public class AddressBook implements AddressBookInfo {
+public abstract class AddressBook implements AddressBookInfo {
     // Declaring ArrayList
     ArrayList<Person> book = new ArrayList<>();
     // Creating scanner object
