@@ -1,118 +1,66 @@
 package com.bridgelabz;
 
 import java.util.Scanner;
+import java.util.*;
 
-public class AddressBookMain {
-    private void options() {
-        boolean status = true;
-        // Declaring and Initializing with predefined standard input object
-        Scanner scan = new Scanner(System.in);
-        // Creating AddressBook object
-        AddressBook addressBook = new AddressBook();
+public class AddressBook {
+    private static final int ADD = 1;
+    private static final int EDIT = 2;
+    private static final int DELETE = 3;
+    private static final int DISPLAY = 4;
+    private static final int SEARCH_CITY = 5;
+    private static final int SORT_DATA = 6;
+    private static final int QUIT = 7;
+    static AddressBookMain add_Book = new AddressBookMain();
+    static Scanner input = new Scanner(System.in);
 
-        /*
-         * To print options to perform Choice to print add and display method Update or
-         * edit the details Delete the details using firstname
-         */
-        while (status) {
-            System.out.println("Hello Enter your option to perform actions: \n Press 1 to Add new person"
-                    + "\n Press 2 to Update/edit details \n Press 3 to Display details \n Press 4 to Delete details "
-                    + " \n Press 5 to Sort the details according to person firstname \n Press 6 to Search on the basis of state or city"
-                    + "\n Press 7 to View on the basis of state or city \n Press 8 to Count on the basis of state or city"
-                    + "\n Press 9 to Sort according to state, city or zip \n Press 0 to Quit");
-            int choice = scan.nextInt();
-            switch (choice) {
-                case 1:
-                    addressBook.add();
-                    break;
-                case 2:
-                    System.out.println("Hello Please enter your firstname to update your details");
-                    String firstName = scan.next();
-                    addressBook.edit(firstName);
-                    break;
-                case 3:
-                    addressBook.display();
-                    break;
-                case 4:
-                    System.out.println("Hello Please enter your firstname to delete your details");
-                    String firstname = scan.next();
-                    addressBook.delete(firstname);
-                    break;
-                case 5:
-                    System.out.println("Sorted Person details: ");
-                    firstname = scan.next();
-                    addressBook.sortAlphabetically(firstname);
-                    break;
-                case 6:
-                    System.out.println("Hi!! on what basis you would like to search the details \nPress 1 to Search "
-                            + "on the basis of City\nPress 2 to Search on the basis of State\n");
-                    int optionToSearch = scan.nextInt();
-                    if (optionToSearch == 1) {
-                        System.out.println("Enter person firstname");
-                        firstname = scan.next();
-                        addressBook.searchPersonInState(firstname);
-                        break;
-                    } else {
-                        firstname = scan.next();
-                        addressBook.searchPersonInCity(firstname);
-                        break;
-                    }
-                case 7:
-                    System.out.println("\nPress 1 for View by city \nPress 2 for view by state");
-                    int optionToView = scan.nextInt();
-                    if (optionToView == 1) {
-                        System.out.println("Enter city name");
-                        String city = scan.next();
-                        addressBook.viewByCity(city);
-                        break;
-                    } else {
-                        System.out.println("Enter state name");
-                        String state = scan.next();
-                        addressBook.viewByState(state);
-                        break;
-                    }
-                case 8:
-                    System.out.println("\nPress 1 for Count by city \nPress 2 for Count by state");
-                    int optionToCount = scan.nextInt();
-                    if (optionToCount == 1) {
-                        System.out.println("Enter city name");
-                        String city = scan.next();
-                        addressBook.countByCity(city);
-                        break;
-                    } else {
-                        System.out.println("Enter state name");
-                        String state = scan.next();
-                        addressBook.countByState(state);
-                        break;
-                    }
-                case 9:
-                    System.out.println("Hi!! on what basis you would like to sort the details \nPress 1 to sort "
-                            + "on the basis of Zip \nPress 2 to sort on the basis of city \nPress 3 to sort on the "
-                            + "basis of state");
-                    int optionToSort = scan.nextInt();
-                    if (optionToSort == 1) {
-                        addressBook.sortZip();
-                        break;
-                    } else if (optionToSort == 2) {
-                        addressBook.sortCity();
-                        break;
-                    } else {
-                        addressBook.sortState();
-                        break;
-                    }
-                default:
-                    status = false;
-
-            }
-
-        }
-
-    }
-
-    /* Main method to call options */
     public static void main(String args[]) {
-        AddressBookMain main = new AddressBookMain();
-        main.options();
+        Hashtable<String, ArrayList<contactInfo>> personInfoDict = new Hashtable<>();
+        ReadWriteOperations readWriteObj = new ReadWriteOperations();
+        ReadWriteCSVFile csvObj = new ReadWriteCSVFile();
 
+        boolean flag = true;
+        int option;
+        while (flag) {
+            option = UserInputOutput.menu();
+            switch (option) {
+                case ADD:
+                    System.out.println("\n" + "Add a new Address Book");
+                    personInfoDict = add_Book.insertContactDetails();
+                    readWriteObj.writeInAddressBook(personInfoDict);
+                    csvObj.writeCSVFile(personInfoDict);
+                    break;
+                case EDIT:
+                    System.out.print("\n" + "Enter the name of the Address Book that you want to replace: ");
+                    String companyName = input.next();
+
+                    add_Book.updateContact(companyName, personInfoDict);
+                    break;
+                case DELETE:
+                    System.out.print("\n" + "Enter the name of the Address Book that you want to delete: ");
+                    String deletedName = input.next();
+                    add_Book.deleteContact(deletedName, personInfoDict);
+                    break;
+                case DISPLAY:
+                    System.out.println("\n" + "Display all contacts in the Address Book");
+                    readWriteObj.readFromAddressBook();
+                    csvObj.readCSVFile();
+                    break;
+                case SEARCH_CITY:
+                    System.out.println("\n" + "Search Address Book based on City or State");
+                    add_Book.searchPerson();
+                    flag = true;
+                    break;
+                case SORT_DATA:
+                    System.out.println("\n" + "Sort Address Book");
+                    add_Book.sortPerson();
+                    flag = true;
+                    break;
+                case QUIT:
+                    flag = false;
+                    System.out.println("\n" + "Thank you for referring the address book.");
+                    break;
+            }
+        }
     }
 }
