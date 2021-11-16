@@ -1,176 +1,69 @@
 package com.bridgelabz;
 
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+public class AddressBook {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        AddressBookMain book = new AddressBookMain();
+        Map<String, AddressBookMain> map = new HashMap<>();
+        Map<String, AddressBook> addressBookMap = new HashMap<>();
 
-//AddressBook implements AddressBookInfo
-public class AddressBook implements AddressBookInfo {
-    // Declaring ArrayList
-    ArrayList<Person> book = new ArrayList<>();
-    // Creating scanner object
-    Scanner scan = new Scanner(System.in);
-
-    @Override
-    public void add() {
-        System.out.println("Enter the AddressBook Name");
-        scan.nextLine();
-        System.out.println("Enter the Person Firstname: ");
-        String firstName = scan.nextLine();
-        System.out.println("Enter the Person Lastname: ");
-        String lastName = scan.nextLine();
-
-        for (int search = 0; search < book.size(); search++) {
-            if (book.get(search).getFirstName().equalsIgnoreCase(firstName)) {
-                if (book.get(search).getLastName().equalsIgnoreCase(lastName)) {
-                    System.out.println("Sorry Name already exists please update/edit your details with option 2");
+        while (true) {
+            System.out.println("Welcome to Address Book System");
+            System.out.println(
+                    "Enter your choice \n1. New Address Book \n2. Select Address Book \n3. Delete Address Book \n4. Search Contact Data \n5. view Contact details \n6.count contacts \n7.Write Data \n8.Read Data \n9.Exit");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter Name of new Address Book: ");
+                    String bookName = sc.next();
+                    map.put(bookName, new AddressBookMain());// adding bookName as a key and value is allocating
+                    AddressBookMain.addressBookOptions(map.get(bookName));
+                    break;
+                case 2:
+                    System.out.println("Available Address Books are : ");
+                    Set<String> keys = map.keySet();
+                    Iterator<String> i = keys.iterator();
+                    while (i.hasNext()) {
+                        System.out.println(i.next());
+                    }
+                    System.out.println("Enter Address Book name you want to Open : ");
+                    String name = sc.nextLine();
+                    System.out.println("Current Address Book is : " + name);
+                    AddressBookMain.addressBookOptions(map.get(name));// call method with passing address book name
+                    break;
+                case 3:
+                    System.out.println("Enter Address Book name to be delete: ");
+                    name = sc.nextLine();
+                    map.remove(name);// delete hashmap using remove function
+                    break;
+                case 4:
+                    book.searchByOptions();
+                case 5:
+                    AddressBookMain.viewByOption(map);
+                    break;
+                case 6:
+                    AddressBookMain.countByOption();
+                    break;
+                case 7:
+                    FileIO fileIO = new FileIO();
+                    fileIO.writeData(addressBookMap);
+                    break;
+                case 8:
+                    FileIO fileIORead = new FileIO();
+                    System.out.println(fileIORead.readData());
+                    break;
+                case 9:
+                    sc.close();
                     return;
-                }
 
+                default:
+                    System.out.println("Please enter a valid option");
+                    break;
             }
         }
-        System.out.println("Enter the Person Address: ");
-        String address = scan.nextLine();
-        System.out.println("Enter the Person City: ");
-        String city = scan.nextLine();
-        System.out.println("Enter the Person State: ");
-        String state = scan.nextLine();
-        System.out.println("Enter the Person Phone Number: ");
-        long phoneNumber = scan.nextLong();
-        System.out.println("Enter the Zip code: ");
-        scan.nextLine();
-        String zip = scan.nextLine();
-        Person person = new Person(firstName, lastName, address, city, state, phoneNumber, zip);
-        book.add(person);
-        System.out.println("Successfully Added!!");
     }
 
-    /* Method to edit or update the details using firstname */
-    @Override
-    public void edit(String firstName) {
-        for (int search = 0; search < book.size(); search++) {
-
-            if (book.get(search).getFirstName().equalsIgnoreCase(firstName)) {
-                Person person = book.get(search);
-                System.out.println("Hi  " + person.getFirstName() + " Please edit your details");
-                System.out.println("Hi " + person.getFirstName() + " Please edit your address");
-                scan.next();
-                String address = scan.nextLine();
-                person.setAddress(address);
-                System.out.println("Hi  " + person.getFirstName() + " Please edit your city");
-                String city = scan.next();
-                person.setCity(city);
-                System.out.println("Hi " + person.getFirstName() + " Please edit your state");
-                String state = scan.next();
-                person.setState(state);
-                System.out.println("Hi " + person.getFirstName() + " Please edit your phone number");
-                long phone = scan.nextLong();
-                person.setPhoneNumber(phone);
-                System.out.println("Hi " + person.getFirstName() + " Please edit your zip");
-                scan.nextLine();
-                String zip = scan.nextLine();
-                person.setZip(zip);
-                System.out.println("Hi " + person.getFirstName() + " Successfully you have updated your details. ");
-            }
-        }
-
-    }
-    /* Method to delete the details using firstname */
-
-    @Override
-    public void delete(String firstName) {
-        for (int select = 0; select < book.size(); select++) {
-            if (book.get(select).getFirstName().equalsIgnoreCase(firstName)) {
-                Person person = book.get(select);
-                book.remove(person);
-                System.out.println("Successfully Deleted!");
-            }
-        }
-
-    }
-
-    public void searchPersonInCity(String firstName) {
-        List<Person> people = book.stream().filter(person1 -> person1.getFirstName().equalsIgnoreCase(firstName))
-                .collect(Collectors.toList());
-
-        for (Person person : people) {
-            System.out.println(person.getFirstName() + "->" + person.getCity());
-        }
-    }
-
-    public void searchPersonInState(String firstName) {
-        List<Person> people = book.stream().filter(person1 -> person1.getFirstName().equalsIgnoreCase(firstName))
-                .collect(Collectors.toList());
-        for (Person person : people) {
-            System.out.println(person.getFirstName() + "->" + person.getState());
-        }
-    }
-
-    public void viewByCity(String city) {
-
-        List<Person> people = book.stream().filter(person1 -> person1.getCity().equalsIgnoreCase(city))
-                .collect(Collectors.toList());
-        for (Person person : people) {
-            System.out.println(person);
-        }
-
-    }
-
-    public void viewByState(String state) {
-        List<Person> people = book.stream().filter(person1 -> person1.getState().equalsIgnoreCase(state))
-                .collect(Collectors.toList());
-        for (Person person : people) {
-            System.out.println(person);
-        }
-    }
-
-    public void countByCity(String city) {
-        Map<String, Long> countCity = book.stream()
-                .collect(Collectors.groupingBy(e -> e.getCity(), Collectors.counting()));
-        System.out.println(countCity);
-        for (Person person : book)
-            System.out.println(person);
-    }
-
-    public void countByState(String state) {
-        Map<String, Long> countState = book.stream()
-                .collect(Collectors.groupingBy(e -> e.getState(), Collectors.counting()));
-        System.out.println(countState);
-        for (Person person : book)
-            System.out.println(person);
-
-    }
-
-    @Override
-    public void sortAlphabetically(String firstName) {
-        book.stream().sorted((p1, p2) -> p1.getFirstName().compareToIgnoreCase(p2.getFirstName()))
-                .forEach(System.out::println);
-
-        // Collections.sort(book, (p1, p2) ->
-        // p1.getFirstName().compareTo(p2.getFirstName()));
-        // System.out.println(book);
-    }
-
-    @Override
-    public void sortZip() {
-        book.stream().sorted((p1, p2) -> p1.getZip().compareTo(p2.getZip())).forEach(System.out::println);
-    }
-
-    @Override
-    public void sortCity() {
-        book.stream().sorted((p1, p2) -> p1.getCity().compareToIgnoreCase(p2.getCity())).forEach(System.out::println);
-    }
-
-    @Override
-    public void sortState() {
-        book.stream().sorted((p1, p2) -> p1.getState().compareToIgnoreCase(p2.getState())).forEach(System.out::println);
-    }
-
-    public void display() {
-        for (Person person : book)
-            System.out.println(person);
-    }
 }
