@@ -13,7 +13,20 @@ public class AddressBookSystem  implements  Info {
         String firstName = scanner.nextLine();
         System.out.println("Enter the Lastname");
         String lastName = scanner.nextLine();
-        System.out.println("Enter the Address: ");
+
+
+        for (Person value : book) {
+            if (value.getFirstName().equalsIgnoreCase(firstName)) {
+                if (value.getLastName().equalsIgnoreCase(lastName)) {
+                    System.out.println("Name is already exist please update/edit your details with option 2");
+                    return;
+                }
+
+            }
+
+        }
+
+            System.out.println("Enter the Address: ");
         String address = scanner.nextLine();
         System.out.println("Enter the City :");
         String city = scanner.nextLine();
@@ -30,29 +43,28 @@ public class AddressBookSystem  implements  Info {
     /* Method to edit or update the details using firstname */
 
     public void edit(String firstName) {
-        for (int search = 0; search < book.size(); search++) {
+        for (Person value : book) {
 
-            if (book.get(search).getFirstName().equalsIgnoreCase(firstName)) {
-                Person person = book.get(search);
-                System.out.println("Hey  " + person.getFirstName() + " Please edit your details");
-                System.out.println("Hey " + person.getFirstName() + " Please edit your address");
+            if (value.getFirstName().equalsIgnoreCase(firstName)) {
+                System.out.println("Hey  " + value.getFirstName() + " Please edit your details");
+                System.out.println("Hey " + value.getFirstName() + " Please edit your address");
                 scanner.next();
                 String address = scanner.nextLine();
-                person.setAddress(address);
-                System.out.println("Hey  " + person.getFirstName() + " Please edit your city");
+                value.setAddress(address);
+                System.out.println("Hey  " + value.getFirstName() + " Please edit your city");
                 String city = scanner.next();
-                person.setCity(city);
-                System.out.println("Hey " + person.getFirstName() + " Please edit your state");
+                value.setCity(city);
+                System.out.println("Hey " + value.getFirstName() + " Please edit your state");
                 String state = scanner.next();
-                person.setState(state);
-                System.out.println("Hey " + person.getFirstName() + " Please edit your phone number");
+                value.setState(state);
+                System.out.println("Hey " + value.getFirstName() + " Please edit your phone number");
                 long phone = scanner.nextLong();
-                person.setPhoneNumber(phone);
-                System.out.println("Hey " + person.getFirstName() + " Please edit your zip");
+                value.setPhoneNumber(phone);
+                System.out.println("Hey " + value.getFirstName() + " Please edit your zip");
                 scanner.nextLine();
                 String zip = scanner.nextLine();
-                person.setZip(zip);
-                System.out.println("Hey " + person.getFirstName() + " Successfully you have updated your details. ");
+                value.setZip(zip);
+                System.out.println("Hey " + value.getFirstName() + " Successfully you have updated your details. ");
             }
         }
 
@@ -70,7 +82,7 @@ public class AddressBookSystem  implements  Info {
 
 
 
-        // Display the persion details added
+        // Display the person details added
     public void display() {
         for (Person person : book)
             System.out.println(person);
