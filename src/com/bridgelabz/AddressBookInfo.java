@@ -3,23 +3,26 @@ package com.bridgelabz;
 
 // interface
 
-   interface AddressBookInfo {
-     public void add();
+     public interface AddressBookInfo {
+             public void add();
+             public void edit(String firstName);
 
-     public void edit(String firstName);
+             public void delete(String firstName);
 
-     public void delete(String firstName);
+             public void searchPersonInState(String firstName);
 
-     void sortAlphabetically();
+             public void searchPersonInCity(String firstName);
 
-     public void sortAlphabetically(String firstName);
+              public void viewByCity(String city);
 
-     public void searchPersonInState(String firstName);
+              public void viewByState(String state);
 
-     public void searchPersonInCity(String firstName);
+              public void countByCity(String city);
 
-     void viewByCity(String city);
+              public void countByState(String state);
 
-     void viewByState(String state);
+         void sortAlphabetically();
+
+         public void sortAlphabetically(String firstName);
 
  }
