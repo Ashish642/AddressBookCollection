@@ -1,10 +1,12 @@
 package com.bridgelabz;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 //AddressBook implements AddressBookInfo
-public class AddressBookSystem implements AddressBookInfo {
+public class AddressBook implements AddressBookInfo {
     // Declaring ArrayList
     ArrayList<Person> book = new ArrayList<>();
     // Creating scanner object
@@ -19,9 +21,9 @@ public class AddressBookSystem implements AddressBookInfo {
         System.out.println("Enter the Person Lastname: ");
         String lastName = scan.nextLine();
 
-        for (Person value : book) {
-            if (value.getFirstName().equalsIgnoreCase(firstName)) {
-                if (value.getLastName().equalsIgnoreCase(lastName)) {
+        for (int search = 0; search < book.size(); search++) {
+            if (book.get(search).getFirstName().equalsIgnoreCase(firstName)) {
+                if (book.get(search).getLastName().equalsIgnoreCase(lastName)) {
                     System.out.println("Sorry Name is already exist please update/edit your details with option 2");
                     return;
                 }
@@ -47,10 +49,10 @@ public class AddressBookSystem implements AddressBookInfo {
     /* Method to edit or update the details using firstname */
     @Override
     public void edit(String firstName) {
-        for (Person value : book) {
+        for (int search = 0; search < book.size(); search++) {
 
-            if (value.getFirstName().equalsIgnoreCase(firstName)) {
-                Person person = value;
+            if (book.get(search).getFirstName().equalsIgnoreCase(firstName)) {
+                Person person = book.get(search);
                 System.out.println("Hi  " + person.getFirstName() + " Please edit your details");
                 System.out.println("Hi " + person.getFirstName() + " Please edit your address");
                 scan.next();
@@ -90,6 +92,11 @@ public class AddressBookSystem implements AddressBookInfo {
 
     @Override
     public void sortAlphabetically() {
+
+    }
+
+    @Override
+    public void sortAlphabetically(String firstName) {
         book.stream().sorted((p1, p2) -> p1.getFirstName().compareToIgnoreCase(p2.getFirstName()))
                 .forEach(System.out::println);
 
@@ -98,9 +105,26 @@ public class AddressBookSystem implements AddressBookInfo {
         // System.out.println(book);
     }
 
-    // Display the person details added
+    public void searchPersonInCity(String firstName) {
+        List<Person> people = book.stream().filter(person1 -> person1.getFirstName().equalsIgnoreCase(firstName))
+                .collect(Collectors.toList());
+
+        for (Person person : people) {
+            System.out.println(person.getFirstName() + "->" + person.getCity());
+        }
+    }
+
+    public void searchPersonInState(String firstName) {
+        List<Person> people = book.stream().filter(person1 -> person1.getFirstName().equalsIgnoreCase(firstName))
+                .collect(Collectors.toList());
+        for (Person person : people) {
+            System.out.println(person.getFirstName() + "->" + person.getState());
+        }
+    }
+
     public void display() {
         for (Person person : book)
             System.out.println(person);
     }
+
 }
